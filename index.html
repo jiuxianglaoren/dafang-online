@@ -488,6 +488,7 @@ function connectToRoom(id, asSpectator = false) {
   if (socket) socket.close();
   roomId = id;
   const WORKER_URL = 'wss://dafang-worker.leidejun666.workers.dev';
+  socket = new WebSocket(`${WORKER_URL}/game/${roomId}`);
   
   socket.onopen = () => {
     document.getElementById('connStatus').textContent = '已连接';
