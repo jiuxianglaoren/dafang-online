@@ -587,6 +587,12 @@ function handleServerMsg(msg) {
 
 // ========== 用户操作 ==========
 function canvasClick(e) {
+  // ✅ 关键修复：检查连接是否有效
+  if (!socket || socket.readyState !== WebSocket.OPEN) {
+    alert("连接已断开，请刷新页面");
+    return;
+  }
+  
   if (role !== 'player' || !game || game.over || game.turn !== localColor) return;
   const rect = e.target.getBoundingClientRect();
   const x = Math.floor((e.clientY - rect.top) / (rect.height / 6));
