@@ -499,6 +499,7 @@ function connectToRoom(id, asSpectator = false) {
   socket.onmessage = (e) => handleServerMsg(JSON.parse(e.data));
   socket.onclose = () => {
     document.getElementById('connStatus').textContent = '断开';
+    socket = null; // ✅ 关键：设为 null，避免后续使用
     document.getElementById('roomText').textContent = '-';
   };
 }
