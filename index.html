@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>大方棋 · 连线对战</title>
+<style>
+:root {
+--bg: #0f172a;
+--text: #e5e7eb;
+--muted: #94a3b8;
+--wood1: #f6deb7;
+--wood2: #efd1a1;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: radial-gradient(1200px 600px at 20% 0%, #1f2937, var(--bg));
+  color: var(--text);
+  padding: 16px;
+}
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+}
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+h1 {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  letter-spacing: 0.5px;
+}
+.appTitle {
+  text-align: center;
+  margin: 0 0 10px 0;
+}
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+button,
+input {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+input {
+  background: #1e293b;
+  width: 120px;
+  font-size: 14px;
+}
+button:hover {
+  border-color: rgba(255,255,255,0.22);
+}
+button.primary {
+  background: rgba(34,197,94,0.18);
+  border-color: rgba(34,197,94,0.35);
+}
+button.danger {
+  background: rgba(239,68,68,0.18);
+  border-color: rgba(239,68,68,0.35);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.18);
+  font-size: 12px;
+  color: var(--muted);
+  gap: 6px;
+}
+.badge strong {
+  color: var(--text);
+}
+.log {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 10px;
+  height: 340px;
+  overflow: auto;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+canvas {
+  width: 520px;
+  height: 520px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  background: repeating-linear-gradient(90deg,
+    rgba(255,255,255,0.12) 0px,
+    rgba(255,255,255,0.12) 1px,
+    rgba(255,255,255,0) 6px,
+    rgba(255,255,255,0) 22px),
+    repeating-linear-gradient(0deg,
+    rgba(0,0,0,0.04) 0px,
+    rgba(0,0,0,0.04) 2px,
+    rgba(0,0,0,0) 14px,
+    rgba(0,0,0,0) 28px),
+    linear-gradient(180deg, var(--wood1), var(--wood2));
+}
+.kpi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.kpi .box {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 12px;
+}
+.box .label {
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.box .val {
+  font-size: 14px;
+}
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+.boardActions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.boardActions button {
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: 1fr; }
+  canvas { width: min(92vw, 640px); height: auto; }
+}
+@media (max-width: 420px) {
+  .row { grid-template-columns: 1fr; }
+  button, input { width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card boardCard">
+    <h1 class="appTitle">大方棋 · 连线对战</h1>
+    <canvas id="cv" width="600" height="600"></canvas>
+    <div class="boardActions">
+      <button class="primary" id="btnQuickMatch">快速对战</button>
+      <button id="btnCreateRoom">创建房间</button>
+      <input id="roomIdInput" placeholder="房间号（4位数字）">
+      <button id="btnJoinRoom">加入房间</button>
+      <button id="btnSpectate">观战</button>
+      <button id="btnRematch">再来一局</button>
+      <button class="danger" id="btnResign">认输</button>
+    </div>
+  </div>
+
+  <div class="card infoCard">
+    <div class="row topbar">
+      <span class="badge">状态 <strong id="connStatus">未连接</strong></span>
+      <span class="badge">角色 <strong id="roleText">-</strong></span>
+      <span class="badge">房间 <strong id="roomText">-</strong></span>
+    </div>
+    <div class="kpi">
+      <div class="box">
+        <div class="label">阶段 / 当前行动</div>
+        <div class="val" id="stageText">-</div>
+        <div class="hint" id="actionHint">-</div>
+      </div>
+      <div class="box">
+        <div class="label">你执</div>
+        <div class="val" id="humanColorText">-</div>
+        <div class="hint">轮到：<span id="turnText">-</span></div>
+      </div>
+      <div class="box">
+        <div class="label">被自拆让出的空位</div>
+        <div class="val mono" id="forbiddenText">-</div>
+      </div>
+    </div>
+    <div class="hint">
+      💡 快速对战：匹配陌生人<br>
+      👥 创建房间：生成4位数字房间号，分享给朋友
+    </div>
+  </div>
+
+  <div class="card bottomCard">
+    <h1>对局日志</h1>
+    <div class="log" id="log"></div>
+    <h1 style="margin-top: 12px">行棋规则</h1>
+    <div class="hint">
+      6×6 交叉点。走棋仅四邻接；奖励=本次动作新形成阵型（复合累加）。<br>
+      第二阶段：吃子额度=2（被吃方自拆让出的阵型子也计入额度）。<br>
+      ✅ 规则校正：边线行/列形成的“龙”不算阵型、不奖励。
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== 常量 ==========
+const EMPTY = 0, BLACK = 1, WHITE = -1, SIZE = 6;
+const DIR4 = [[-1,0],[1,0],[0,-1],[0,1]];
+function colorName(c) { return c === BLACK ? "黑●" : "白○"; }
+function isBorder(x, y) { return x===0||x===SIZE-1||y===0||y===SIZE-1; }
+
+// ========== 游戏核心（纯逻辑）==========
+class DafangGameCore {
+  constructor(humanColor) {
+    this.humanColor = humanColor;
+    this.aiColor = 0;
+    this.board = Array.from({length:SIZE}, () => Array(SIZE).fill(EMPTY));
+    this.stage = 1;
+    this.turn = BLACK;
+    this.over = false;
+    this.winner = null;
+    this.loseReason = "";
+    this.placeRemaining = 1;
+    this.placeRewardLocked = false;
+    this.capturePlan = [
+      {capturer:WHITE, victim:BLACK, left:2},
+      {capturer:BLACK, victim:WHITE, left:2}
+    ];
+    this.captureIndex = 0;
+    this.pendingCapture = 0;
+    this.pendingCapturer = 0;
+    this.pendingVictim = 0;
+    this.needRelieve = false;
+    this.relievePlayer = null;
+    this.selfbreakMode = null;
+    this.selected = null;
+    this.moveInProgress = false;
+    this.recentSelfbreakEmpty = {[BLACK]:new Set(),[WHITE]:new Set()};
+    this.log = [];
+  }
+
+  // ========== 工具函数（略，实际需补全）==========
+  inBounds(x, y) { return x >= 0 && x < SIZE && y >= 0 && y < SIZE; }
+  countPieces(color) {
+    let n = 0;
+    for (let x = 0; x < SIZE; x++)
+      for (let y = 0; y < SIZE; y++)
+        if (this.board[x][y] === color) n++;
+    return n;
+  }
+  _canMove(x, y) {
+    for (const [dx, dy] of DIR4) {
+      const nx = x + dx, ny = y + dy;
+      if (this.inBounds(nx, ny) && this.board[nx][ny] === EMPTY) return true;
+    }
+    return false;
+  }
+  legalMoves(color) {
+    const moves = [];
+    for (let x = 0; x < SIZE; x++) {
+      for (let y = 0; y < SIZE; y++) {
+        if (this.board[x][y] !== color) continue;
+        for (const [dx, dy] of DIR4) {
+          const nx = x + dx, ny = y + dy;
+          if (this.inBounds(nx, ny) && this.board[nx][ny] === EMPTY)
+            moves.push([x, y, nx, ny]);
+        }
+      }
+    }
+    return moves;
+  }
+  enumeratePatterns(color) { /* 略 */ }
+  _patKey(kind, cells) { /* 略 */ }
+  _patParse(key) { /* 略 */ }
+  newPatternsAndReward(beforeSet, afterSet) { /* 略 */ }
+  patternMembers(color) { /* 略 */ }
+  idlePositions(color) { /* 略 */ }
+  moveForbiddenBySelfbreak(color, newPatternKeys) { /* 略 */ }
+  _hasAnyLegalMove(color) { /* 略 */ }
+  _currentCaptureTask() { /* 略 */ }
+  _advanceStage2IfDone() { /* 略 */ }
+  _onStage3TurnEnd(move, moverColor) { /* 略 */ }
+  _checkSingleLoop(move, color) { /* 略 */ }
+  _getRelieveDistanceMap(relieverColor, victimColor) { /* 略 */ }
+  _getRelieveAllowedPieces(relieverColor) { /* 略 */ }
+  _endRelieve() { /* 略 */ }
+  _clearRelieveCache() { /* 略 */ }
+  _resetStage3Context() { /* 略 */ }
+  _resetStage3Counters() { /* 略 */ }
+  _endGame(loserColor, reason) { /* 略 */ }
+  _forceEndGame(loserColor, reason) { /* 略 */ }
+  _endDraw(reason) { /* 略 */ }
+  _applyMove(x1, y1, x2, y2) {
+    const c = this.board[x1][y1];
+    this.board[x1][y1] = EMPTY;
+    this.board[x2][y2] = c;
+  }
+  _clearStage3Input() {
+    this.selected = null;
+    this.moveInProgress = false;
+  }
+
+  // ========== 阶段处理（略）==========
+  _handleStage1Place(x, y) { /* 略 */ }
+  _handleStage2Capture(x, y) { /* 略 */ }
+  _handleStage3Move(x, y) { /* 略 */ }
+  _handlePendingCapture(x, y) { /* 略 */ }
+  _handleSelfbreakClick(x, y) { /* 略 */ }
+  _requestSelfbreak(victimColor, returnToColor, countTowardStage2 = false) { /* 略 */ }
+  _doSelfBreakUntilIdle(victimColor, countTowardStage2, returnToColor) { /* 略 */ }
+
+  handleClick(x, y) {
+    if (this.over || this.stage === 4) return false;
+    if (this.needRelieve) return this._handleStage3Move(x, y);
+    if (this.selfbreakMode) return this._handleSelfbreakClick(x, y);
+    if (this.stage === 1) return this._handleStage1Place(x, y);
+    if (this.stage === 2) return this._handleStage2Capture(x, y);
+    if (this.stage === 3) return this._handleStage3Move(x, y);
+    return false;
+  }
+
+  stageText() {
+    if (this.stage === 1) return "第一阶段：落子";
+    if (this.stage === 2) return "第二阶段：吃子";
+    if (this.stage === 3) return "第三阶段：走棋";
+    return "终局";
+  }
+
+  actionHint() {
+    if (this.over) return "对局已结束。";
+    if (this.selfbreakMode) {
+      const { victim } = this.selfbreakMode;
+      return `需要自拆：请 ${colorName(victim)} 点击自己的阵型子自拆。`;
+    }
+    if (this.stage === 1) {
+      return `落子中。本方还可落子：${this.placeRemaining} 次。`;
+    }
+    if (this.stage === 2) {
+      const t = this._currentCaptureTask();
+      if (!t) return "吃子完毕，准备进入走棋。";
+      return `${colorName(t.capturer)} 吃 ${colorName(t.victim)}，还需吃 ${t.left} 个。`;
+    }
+    if (this.stage === 3) {
+      if (this.pendingCapture > 0) {
+        return `因成阵吃子：还需吃 ${this.pendingCapture} 个 ${colorName(this.pendingVictim)} 闲子。`;
+      }
+      if (this.needRelieve) {
+        return `放活：必须再走一步让对方可动。`;
+      }
+      return `走棋中：先选棋子，再点四邻接空位。`;
+    }
+    return "终局。";
+  }
+
+  _log(s) { this.log.push(s); }
+
+  resign(color) {
+    if (this.over) return;
+    this._endGame(color, "认输");
+  }
+
+  // ========== 状态导出 ==========
+  exportState() {
+    return {
+      board: this.board.map(r => r.slice()),
+      stage: this.stage,
+      turn: this.turn,
+      over: this.over,
+      winner: this.winner,
+      loseReason: this.loseReason,
+      placeRemaining: this.placeRemaining,
+      placeRewardLocked: this.placeRewardLocked,
+      capturePlan: this.capturePlan.map(cp => ({...cp})),
+      captureIndex: this.captureIndex,
+      pendingCapture: this.pendingCapture,
+      pendingCapturer: this.pendingCapturer,
+      pendingVictim: this.pendingVictim,
+      needRelieve: this.needRelieve,
+      relievePlayer: this.relievePlayer,
+      selfbreakMode: this.selfbreakMode ? {...this.selfbreakMode} : null,
+      recentSelfbreakEmpty: {
+        [BLACK]: [...this.recentSelfbreakEmpty[BLACK]],
+        [WHITE]: [...this.recentSelfbreakEmpty[WHITE]],
+      },
+      drawOffer: this.drawOffer,
+      noCaptureCounter: this.noCaptureCounter,
+      loopInfo: {
+        [BLACK]: {
+          a: this.loopInfo[BLACK].a ? [...this.loopInfo[BLACK].a] : null,
+          b: this.loopInfo[BLACK].b ? [...this.loopInfo[BLACK].b] : null,
+          ok: this.loopInfo[BLACK].ok
+        },
+        [WHITE]: {
+          a: this.loopInfo[WHITE].a ? [...this.loopInfo[WHITE].a] : null,
+          b: this.loopInfo[WHITE].b ? [...this.loopInfo[WHITE].b] : null,
+          ok: this.loopInfo[WHITE].ok
+        }
+      },
+      loopRepeatCount: this.loopRepeatCount,
+      humanColor: this.humanColor,
+    };
+  }
+
+  static fromState(state) {
+    const game = new DafangGameCore(state.humanColor);
+    game.board = state.board.map(r => r.slice());
+    game.stage = state.stage;
+    game.turn = state.turn;
+    game.over = state.over;
+    game.winner = state.winner;
+    game.loseReason = state.loseReason;
+    game.placeRemaining = state.placeRemaining;
+    game.placeRewardLocked = state.placeRewardLocked;
+    game.capturePlan = state.capturePlan.map(cp => ({...cp}));
+    game.captureIndex = state.captureIndex;
+    game.pendingCapture = state.pendingCapture;
+    game.pendingCapturer = state.pendingCapturer;
+    game.pendingVictim = state.pendingVictim;
+    game.needRelieve = state.needRelieve;
+    game.relievePlayer = state.relievePlayer;
+    game.selfbreakMode = state.selfbreakMode ? {...state.selfbreakMode} : null;
+    game.recentSelfbreakEmpty = {
+      [BLACK]: new Set(state.recentSelfbreakEmpty[BLACK]),
+      [WHITE]: new Set(state.recentSelfbreakEmpty[WHITE]),
+    };
+    game.drawOffer = state.drawOffer;
+    game.noCaptureCounter = state.noCaptureCounter;
+    game.loopInfo = {
+      [BLACK]: {
+        a: state.loopInfo[BLACK].a ? [...state.loopInfo[BLACK].a] : null,
+        b: state.loopInfo[BLACK].b ? [...state.loopInfo[BLACK].b] : null,
+        ok: Boolean(state.loopInfo[BLACK].ok)
+      },
+      [WHITE]: {
+        a: state.loopInfo[WHITE].a ? [...state.loopInfo[WHITE].a] : null,
+        b: state.loopInfo[WHITE].b ? [...state.loopInfo[WHITE].b] : null,
+        ok: Boolean(state.loopInfo[WHITE].ok)
+      }
+    };
+    game.loopRepeatCount = state.loopRepeatCount;
+    return game;
+  }
+}
+
+// ========== 前端状态 ==========
+let socket = null;
+let role = 'spectator';
+let localColor = null;
+let roomId = null;
+let game = null;
+let rematchRequested = false;
+const ctx = document.getElementById('cv').getContext('2d');
+
+// ========== 绘制空棋盘 ==========
+function drawEmptyBoard() {
+  const pad = 60, span = (600 - 2*pad)/5;
+  ctx.clearRect(0, 0, 600, 600);
+  for (let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.moveTo(pad, pad + i * span);
+    ctx.lineTo(pad + 5 * span, pad + i * span);
+    ctx.moveTo(pad + i * span, pad);
+    ctx.lineTo(pad + i * span, pad + 5 * span);
+    ctx.stroke();
+  }
+}
+
+// ========== 连接逻辑 ==========
+function connectToRoom(id, asSpectator = false) {
+  if (socket) socket.close();
+  roomId = id;
+  const WORKER_URL = 'wss://dafang-worker.leidejun666.workers.dev';
+  
+  socket.onopen = () => {
+    document.getElementById('connStatus').textContent = '已连接';
+    document.getElementById('roomText').textContent = id;
+    socket.send(JSON.stringify({ type: 'join', asSpectator }));
+  };
+  
+  socket.onmessage = (e) => handleServerMsg(JSON.parse(e.data));
+  socket.onclose = () => {
+    document.getElementById('connStatus').textContent = '断开';
+    document.getElementById('roomText').textContent = '-';
+  };
+}
+
+document.getElementById('btnQuickMatch').onclick = () => {
+  connectToRoom('match_' + Math.random().toString(36).slice(2, 8), false);
+};
+
+document.getElementById('btnCreateRoom').onclick = () => {
+  const id = String(Math.floor(Math.random() * 9000) + 1000); // 1000-9999
+  connectToRoom(id, false);
+  alert(`房间已创建\n房间号: ${id}\n请分享给对手`);
+};
+
+document.getElementById('btnJoinRoom').onclick = () => {
+  const id = document.getElementById('roomIdInput').value.trim();
+  if (/^\d{4}$/.test(id)) {
+    connectToRoom(id, false);
+  } else {
+    alert('请输入4位数字房间号');
+  }
+};
+
+document.getElementById('btnSpectate').onclick = () => {
+  const id = document.getElementById('roomIdInput').value.trim();
+  if (/^\d{4}$/.test(id)) {
+    connectToRoom(id, true);
+  } else {
+    alert('请输入4位数字房间号');
+  }
+};
+
+// ========== 再来一局 ==========
+document.getElementById('btnRematch').onclick = () => {
+  if (!game || !game.over || !socket) return;
+  if (rematchRequested) return;
+  rematchRequested = true;
+  socket.send(JSON.stringify({ type: 'rematch_request' }));
+  log('你请求再来一局...');
+};
+
+function showRematchDialog() {
+  if (!confirm('对方请求再来一局，是否同意？')) {
+    socket.send(JSON.stringify({ type: 'rematch_reject' }));
+    log('你拒绝了再来一局');
+  } else {
+    socket.send(JSON.stringify({ type: 'rematch_accept' }));
+    log('双方同意再来一局');
+  }
+}
+
+// ========== 消息处理 ==========
+function handleServerMsg(msg) {
+  if (msg.type === 'assign_role') {
+    role = msg.role;
+    localColor = msg.color;
+    document.getElementById('roleText').textContent = 
+      role === 'spectator' ? '观战者' : 
+      (localColor === BLACK ? '黑方玩家' : '白方玩家');
+    game = new DafangGameCore(localColor);
+    render();
+  }
+  else if (msg.type === 'sync_state') {
+    game = DafangGameCore.fromState(msg.state);
+    render();
+    if (msg.move) {
+      game._log(`${colorName(msg.move.by)} 落子 (${msg.move.x},${msg.move.y})`);
+    }
+  }
+  else if (msg.type === 'game_over') {
+    const winner = msg.winner === null ? '和棋' : 
+                   msg.winner === 1 ? '黑方胜' : '白方胜';
+    game._log(`🏁 ${winner} —— ${msg.reason}`);
+    render();
+    rematchRequested = false;
+  }
+  else if (msg.type === 'rematch_request') {
+    showRematchDialog();
+  }
+  else if (msg.type === 'rematch_start') {
+    game = new DafangGameCore(localColor);
+    render();
+    log('新局开始！');
+  }
+}
+
+// ========== 用户操作 ==========
+function canvasClick(e) {
+  if (role !== 'player' || !game || game.over || game.turn !== localColor) return;
+  const rect = e.target.getBoundingClientRect();
+  const x = Math.floor((e.clientY - rect.top) / (rect.height / 6));
+  const y = Math.floor((e.clientX - rect.left) / (rect.width / 6));
+  socket.send(JSON.stringify({ type: 'move', x, y }));
+}
+document.getElementById('cv').addEventListener('click', canvasClick);
+
+document.getElementById('btnResign').onclick = () => {
+  if (role !== 'player' || !game || game.over) return;
+  game.resign(localColor);
+  socket.send(JSON.stringify({ type: 'resign' }));
+  render();
+};
+
+// ========== 渲染 & 日志 ==========
+function render() {
+  const pad = 60, span = (600 - 2*pad)/5;
+  ctx.clearRect(0, 0, 600, 600);
+  for (let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.moveTo(pad, pad + i * span);
+    ctx.lineTo(pad + 5 * span, pad + i * span);
+    ctx.moveTo(pad + i * span, pad);
+    ctx.lineTo(pad + i * span, pad + 5 * span);
+    ctx.stroke();
+  }
+  for (let x = 0; x < 6; x++) {
+    for (let y = 0; y < 6; y++) {
+      const v = game.board[x][y];
+      if (v !== 0) {
+        ctx.beginPath();
+        ctx.arc(pad + y * span, pad + x * span, 20, 0, Math.PI * 2);
+        ctx.fillStyle = v === 1 ? 'black' : 'white';
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+  }
+  document.getElementById('stageText').textContent = game.stageText();
+  document.getElementById('actionHint').textContent = game.actionHint();
+  document.getElementById('turnText').textContent = game.over ? '-' : colorName(game.turn);
+  document.getElementById('humanColorText').textContent = 
+    role === 'spectator' ? '观战' : `${colorName(localColor)}（${localColor === BLACK ? "先手" : "后手"}）`;
+  const forb = Array.from(game.recentSelfbreakEmpty[game.turn] || []);
+  document.getElementById('forbiddenText').textContent = forb.length ? forb.join("  ") : "（无）";
+  
+  const el = document.getElementById('log');
+  el.textContent = game.log.slice(-200).join('\n');
+  el.scrollTop = el.scrollHeight;
+}
+
+function log(msg) {
+  const el = document.getElementById('log');
+  el.textContent += msg + '\n';
+  el.scrollTop = el.scrollHeight;
+}
+
+// ========== 初始化 ==========
+drawEmptyBoard();
+</script>
+</body>
+</html>
