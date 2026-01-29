@@ -466,8 +466,25 @@ let role = 'spectator';
 let localColor = null;
 let roomId = null;
 let game = null;
-let rematchRequested = false;
+let heartbeatInterval = null; // 👈 新增：心跳定时器
 const ctx = document.getElementById('cv').getContext('2d');
+
+// ========== 心跳函数 ==========
+function startHeartbeat() {
+  if (heartbeatInterval) clearInterval(heartbeatInterval);
+  heartbeatInterval = setInterval(() => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: 'ping' }));
+    }
+  }, 5 * 60 * 1000); // 每 5 分钟发一次（< 10 分钟，避免休眠）
+}
+
+function stopHeartbeat() {
+  if (heartbeatInterval) {
+    clearInterval(heartbeatInterval);
+    heartbeatInterval = null;
+  }
+}
 
 // ========== 绘制空棋盘 ==========
 function drawEmptyBoard() {
@@ -492,15 +509,15 @@ function connectToRoom(id, asSpectator = false) {
   
   socket.onopen = () => {
     document.getElementById('connStatus').textContent = '已连接';
-    document.getElementById('roomText').textContent = id;
     socket.send(JSON.stringify({ type: 'join', asSpectator }));
+    startHeartbeat(); // 👈 连接成功后启动心跳
   };
   
   socket.onmessage = (e) => handleServerMsg(JSON.parse(e.data));
   socket.onclose = () => {
     document.getElementById('connStatus').textContent = '断开';
+    stopHeartbeat(); // 👈 连接关闭时停止心跳
     socket = null; // ✅ 关键：设为 null，避免后续使用
-    document.getElementById('roomText').textContent = '-';
   };
 }
 
@@ -593,7 +610,7 @@ function canvasClick(e) {
     alert("连接已断开，请刷新页面");
     return;
   }
-  
+
   if (role !== 'player' || !game || game.over || game.turn !== localColor) return;
   const rect = e.target.getBoundingClientRect();
   const x = Math.floor((e.clientY - rect.top) / (rect.height / 6));
