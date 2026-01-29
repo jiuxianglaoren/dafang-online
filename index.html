@@ -607,7 +607,7 @@ function handleServerMsg(msg) {
 function canvasClick(e) {
   // ✅ 关键修复：检查连接是否有效
   if (!socket || socket.readyState !== WebSocket.OPEN) {
-    alert("连接已断开，请刷新页面");
+    alert("连接已断开，请刷新页面重新加入房间");
     return;
   }
 
