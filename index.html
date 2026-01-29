@@ -9,217 +9,276 @@
 --bg: #0f172a;
 --text: #e5e7eb;
 --muted: #94a3b8;
+/* 浅枫木（Maple）配色 */
 --wood1: #f6deb7;
 --wood2: #efd1a1;
+--wood3: #e7c28a;
+--panel: rgba(255, 255, 255, 0.06);
+--panelBorder: rgba(255, 255, 255, 0.1);
 }
-* { box-sizing: border-box; }
+* {
+box-sizing: border-box;
+}
 body {
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  background: radial-gradient(1200px 600px at 20% 0%, #1f2937, var(--bg));
-  color: var(--text);
-  padding: 16px;
+margin: 0;
+font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+Helvetica, Arial;
+background: radial-gradient(1200px 600px at 20% 0%, #1f2937, var(--bg));
+color: var(--text);
+padding: 16px;
 }
 .wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 16px;
+max-width: 1100px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: 1.3fr 1fr;
+gap: 16px;
 }
 .card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+background: linear-gradient(180deg,
+rgba(255, 255, 255, 0.06),
+rgba(255, 255, 255, 0.03));
+border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 14px;
+padding: 14px;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 h1 {
-  font-size: 18px;
-  margin: 0 0 10px 0;
-  letter-spacing: 0.5px;
+font-size: 18px;
+margin: 0 0 10px 0;
+letter-spacing: 0.5px;
 }
 .appTitle {
-  text-align: center;
-  margin: 0 0 10px 0;
+text-align: center;
+margin: 0 0 10px 0;
+}
+.sub {
+font-size: 12px;
+color: var(--muted);
+margin-top: -2px;
+margin-bottom: 10px;
+line-height: 1.4;
 }
 .row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+align-items: center;
 }
 button,
-input {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: var(--text);
-  padding: 8px 10px;
-  border-radius: 10px;
-  cursor: pointer;
+select {
+background: rgba(255, 255, 255, 0.07);
+border: 1px solid rgba(255, 255, 255, 0.12);
+color: var(--text);
+padding: 8px 10px;
+border-radius: 10px;
+cursor: pointer;
 }
-input {
-  background: #1e293b;
-  width: 120px;
-  font-size: 14px;
+select {
+cursor: default;
 }
 button:hover {
-  border-color: rgba(255,255,255,0.22);
+border-color: rgba(255, 255, 255, 0.22);
 }
 button.primary {
-  background: rgba(34,197,94,0.18);
-  border-color: rgba(34,197,94,0.35);
+background: rgba(34, 197, 94, 0.18);
+border-color: rgba(34, 197, 94, 0.35);
 }
 button.danger {
-  background: rgba(239,68,68,0.18);
-  border-color: rgba(239,68,68,0.35);
+background: rgba(239, 68, 68, 0.18);
+border-color: rgba(239, 68, 68, 0.35);
+}
+button:disabled {
+opacity: 0.45;
+cursor: not-allowed;
 }
 .badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 8px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(0,0,0,0.18);
-  font-size: 12px;
-  color: var(--muted);
-  gap: 6px;
+display: inline-flex;
+align-items: center;
+padding: 4px 8px;
+border-radius: 999px;
+border: 1px solid rgba(255, 255, 255, 0.12);
+background: rgba(0, 0, 0, 0.18);
+font-size: 12px;
+color: var(--muted);
+gap: 6px;
 }
 .badge strong {
-  color: var(--text);
+color: var(--text);
 }
 .log {
-  background: rgba(0,0,0,0.25);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 10px;
-  height: 340px;
-  overflow: auto;
-  font-size: 12px;
-  line-height: 1.45;
-  white-space: pre-wrap;
+background: rgba(0, 0, 0, 0.25);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+padding: 10px;
+height: 340px;
+overflow: auto;
+font-size: 12px;
+line-height: 1.45;
+white-space: pre-wrap;
+}
+.log {
+user-select: text;
+-webkit-user-select: text;
+cursor: text;
+overscroll-behavior: contain;
+}
+.gridWrap {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 8px;
+gap: 10px;
 }
 canvas {
-  width: 520px;
-  height: 520px;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  background: repeating-linear-gradient(90deg,
-    rgba(255,255,255,0.12) 0px,
-    rgba(255,255,255,0.12) 1px,
-    rgba(255,255,255,0) 6px,
-    rgba(255,255,255,0) 22px),
-    repeating-linear-gradient(0deg,
-    rgba(0,0,0,0.04) 0px,
-    rgba(0,0,0,0.04) 2px,
-    rgba(0,0,0,0) 14px,
-    rgba(0,0,0,0) 28px),
-    linear-gradient(180deg, var(--wood1), var(--wood2));
-}
-.kpi {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 10px;
-}
-.kpi .box {
-  background: rgba(0,0,0,0.2);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 10px;
-  font-size: 12px;
-}
-.box .label {
-  color: var(--muted);
-  margin-bottom: 4px;
-}
-.box .val {
-  font-size: 14px;
+width: 520px;
+height: 520px;
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 16px;
+cursor: pointer;
+touch-action: manipulation;
+background: repeating-linear-gradient(90deg,
+rgba(255, 255, 255, 0.12) 0px,
+rgba(255, 255, 255, 0.12) 1px,
+rgba(255, 255, 255, 0) 6px,
+rgba(255, 255, 255, 0) 22px),
+repeating-linear-gradient(0deg,
+rgba(0, 0, 0, 0.04) 0px,
+rgba(0, 0, 0, 0.04) 2px,
+rgba(0, 0, 0, 0) 14px,
+rgba(0, 0, 0, 0) 28px),
+linear-gradient(180deg, var(--wood1), var(--wood2));
 }
 .hint {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 8px;
-  line-height: 1.5;
+font-size: 12px;
+color: var(--muted);
+margin-top: 8px;
+line-height: 1.5;
 }
-.boardActions {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 8px;
+.kpi {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+margin-top: 10px;
 }
-.boardActions button {
-  font-size: 14px;
-  padding: 6px 10px;
-  border-radius: 10px;
+.kpi .box {
+background: rgba(0, 0, 0, 0.2);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+padding: 10px;
+font-size: 12px;
+}
+.box .label {
+color: var(--muted);
+margin-bottom: 4px;
+}
+.box .val {
+font-size: 14px;
+}
+.selectLine {
+margin-top: 8px;
+color: var(--muted);
+font-size: 12px;
+}
+.mono {
+font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+"Liberation Mono", "Courier New", monospace;
+}
+#selLevel {
+background: rgba(0, 0, 0, 0.45);
+color: var(--text);
+border: 1px solid rgba(255, 255, 255, 0.2);
+padding: 4px 10px;
+border-radius: 10px;
+}
+#selLevel option {
+background: #111827;
+color: #f9fafb;
+}
+#selLevel:focus {
+outline: 2px solid rgba(245, 158, 11, 0.7);
+outline-offset: 2px;
 }
 @media (max-width: 860px) {
-  .wrap { grid-template-columns: 1fr; }
-  canvas { width: min(92vw, 640px); height: auto; }
+.wrap { grid-template-columns: 1fr; }
+canvas { width: min(92vw, 640px); height: auto; }
 }
 @media (max-width: 420px) {
-  .row { grid-template-columns: 1fr; }
-  button, input { width: 100%; }
+.row { grid-template-columns: 1fr; }
+button, select { width: 100%; }
+}
+.boardActions {
+display: flex;
+justify-content: center;
+gap: 8px;
+flex-wrap: wrap;
+margin-top: 8px;
+}
+.boardActions button {
+font-size: 14px;
+padding: 6px 10px;
+border-radius: 10px;
 }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="card boardCard">
-    <h1 class="appTitle">大方棋 · 连线对战</h1>
-    <canvas id="cv" width="600" height="600"></canvas>
-    <div class="boardActions">
-      <button class="primary" id="btnQuickMatch">快速对战</button>
-      <button id="btnCreateRoom">创建房间</button>
-      <input id="roomIdInput" placeholder="房间号（4位数字）">
-      <button id="btnJoinRoom">加入房间</button>
-      <button id="btnSpectate">观战</button>
-      <button id="btnRematch">再来一局</button>
-      <button class="danger" id="btnResign">认输</button>
-    </div>
-  </div>
-
-  <div class="card infoCard">
-    <div class="row topbar">
-      <span class="badge">状态 <strong id="connStatus">未连接</strong></span>
-      <span class="badge">角色 <strong id="roleText">-</strong></span>
-      <span class="badge">房间 <strong id="roomText">-</strong></span>
-    </div>
-    <div class="kpi">
-      <div class="box">
-        <div class="label">阶段 / 当前行动</div>
-        <div class="val" id="stageText">-</div>
-        <div class="hint" id="actionHint">-</div>
-      </div>
-      <div class="box">
-        <div class="label">你执</div>
-        <div class="val" id="humanColorText">-</div>
-        <div class="hint">轮到：<span id="turnText">-</span></div>
-      </div>
-      <div class="box">
-        <div class="label">被自拆让出的空位</div>
-        <div class="val mono" id="forbiddenText">-</div>
-      </div>
-    </div>
-    <div class="hint">
-      💡 快速对战：匹配陌生人<br>
-      👥 创建房间：生成4位数字房间号，分享给朋友
-    </div>
-  </div>
-
-  <div class="card bottomCard">
-    <h1>对局日志</h1>
-    <div class="log" id="log"></div>
-    <h1 style="margin-top: 12px">行棋规则</h1>
-    <div class="hint">
-      6×6 交叉点。走棋仅四邻接；奖励=本次动作新形成阵型（复合累加）。<br>
-      第二阶段：吃子额度=2（被吃方自拆让出的阵型子也计入额度）。<br>
-      ✅ 规则校正：边线行/列形成的“龙”不算阵型、不奖励。
-    </div>
-  </div>
+<div class="card boardCard">
+<h1 class="appTitle">大方棋 · 连线对战</h1>
+<div class="gridWrap">
+<canvas id="cv" width="600" height="600"></canvas>
+<div class="boardActions">
+<button class="primary" id="btnQuickMatch">快速对战</button>
+<button id="btnCreateRoom">创建房间</button>
+<input id="roomIdInput" placeholder="房间号（4位数字）" style="width:120px;padding:6px;font-size:14px;background:#1e293b;border:1px solid #334155;color:white;">
+<button id="btnJoinRoom">加入房间</button>
+<button id="btnSpectate">观战</button>
+<button id="btnRematch">再来一局</button>
+<button class="danger" id="btnResign">认输</button>
 </div>
-
+</div>
+</div>
+<div class="card infoCard">
+<div class="row topbar">
+<span class="badge">状态 <strong id="connStatus">未连接</strong></span>
+<span class="badge">角色 <strong id="roleText">-</strong></span>
+<span class="badge">房间 <strong id="roomText">-</strong></span>
+</div>
+<div class="kpi">
+<div class="box">
+<div class="label">阶段 / 当前行动</div>
+<div class="val" id="stageText">-</div>
+<div class="selectLine" id="actionHint">-</div>
+</div>
+<div class="box">
+<div class="label">你执</div>
+<div class="val" id="humanColorText">-</div>
+<div class="selectLine">轮到：<span id="turnText">-</span></div>
+</div>
+<div class="box">
+<div class="label">被自拆让出的空位（限制下一回合成阵）</div>
+<div class="val mono" id="forbiddenText">-</div>
+<div class="selectLine">仅当“无闲子可吃→自拆阵型子”才会出现</div>
+</div>
+</div>
+<div class="hint">
+💡 快速对战：自动匹配对手<br>
+👀 观战：输入房间号只看不操作
+</div>
+</div>
+<div class="card bottomCard">
+<h1>对局日志</h1>
+<div class="log" id="log"></div>
+<h1 style="margin-top: 12px">行棋规则</h1>
+<div class="sub">
+6×6 交叉点。走棋仅四邻接；奖励=本次动作新形成阵型（复合累加）。<br>
+第二阶段：吃子额度=2（被吃方自拆让出的阵型子也计入额度）。<br>
+重要：无闲子可吃时，吃子方上步已结束 → 立刻切到对方计时并要求对方自拆。<br>
+✅ 规则校正：边线行/列形成的“龙”不算阵型、不奖励。
+</div>
+</div>
+</div>
 <script>
 // ========== 常量 ==========
 const EMPTY = 0, BLACK = 1, WHITE = -1, SIZE = 6;
@@ -227,7 +286,7 @@ const DIR4 = [[-1,0],[1,0],[0,-1],[0,1]];
 function colorName(c) { return c === BLACK ? "黑●" : "白○"; }
 function isBorder(x, y) { return x===0||x===SIZE-1||y===0||y===SIZE-1; }
 
-// ========== 游戏核心（纯逻辑）==========
+// ========== 游戏核心（纯逻辑，无 DOM）==========
 class DafangGameCore {
   constructor(humanColor) {
     this.humanColor = humanColor;
@@ -257,7 +316,7 @@ class DafangGameCore {
     this.log = [];
   }
 
-  // ========== 工具函数（略，实际需补全）==========
+  // ========== 工具函数 ==========
   inBounds(x, y) { return x >= 0 && x < SIZE && y >= 0 && y < SIZE; }
   countPieces(color) {
     let n = 0;
@@ -287,94 +346,628 @@ class DafangGameCore {
     }
     return moves;
   }
-  enumeratePatterns(color) { /* 略 */ }
-  _patKey(kind, cells) { /* 略 */ }
-  _patParse(key) { /* 略 */ }
-  newPatternsAndReward(beforeSet, afterSet) { /* 略 */ }
-  patternMembers(color) { /* 略 */ }
-  idlePositions(color) { /* 略 */ }
-  moveForbiddenBySelfbreak(color, newPatternKeys) { /* 略 */ }
-  _hasAnyLegalMove(color) { /* 略 */ }
-  _currentCaptureTask() { /* 略 */ }
-  _advanceStage2IfDone() { /* 略 */ }
-  _onStage3TurnEnd(move, moverColor) { /* 略 */ }
-  _checkSingleLoop(move, color) { /* 略 */ }
-  _getRelieveDistanceMap(relieverColor, victimColor) { /* 略 */ }
-  _getRelieveAllowedPieces(relieverColor) { /* 略 */ }
-  _endRelieve() { /* 略 */ }
-  _clearRelieveCache() { /* 略 */ }
-  _resetStage3Context() { /* 略 */ }
-  _resetStage3Counters() { /* 略 */ }
-  _endGame(loserColor, reason) { /* 略 */ }
-  _forceEndGame(loserColor, reason) { /* 略 */ }
-  _endDraw(reason) { /* 略 */ }
+
+  // ========== 阵型系统 ==========
+  enumeratePatterns(color) {
+    const patterns = new Set();
+    // 方
+    for (let x = 0; x < SIZE - 1; x++) {
+      for (let y = 0; y < SIZE - 1; y++) {
+        const cells = [[x,y],[x+1,y],[x,y+1],[x+1,y+1]];
+        if (cells.every(([i,j]) => this.board[i][j] === color)) {
+          patterns.add(this._patKey("SQUARE", cells));
+        }
+      }
+    }
+    // 斜线
+    const diagStarts = (dx, dy) => {
+      const s = [];
+      if (dx === 1 && dy === 1) {
+        for (let y = 0; y < SIZE; y++) s.push([0, y]);
+        for (let x = 1; x < SIZE; x++) s.push([x, 0]);
+      } else {
+        for (let y = 0; y < SIZE; y++) s.push([0, y]);
+        for (let x = 1; x < SIZE; x++) s.push([x, SIZE - 1]);
+      }
+      return s;
+    };
+    const collectDiag = (sx, sy, dx, dy) => {
+      const a = []; let x = sx, y = sy;
+      while (this.inBounds(x, y)) { a.push([x, y]); x += dx; y += dy; }
+      return a;
+    };
+    const runsToPatterns = (diag) => {
+      let i = 0;
+      while (i < diag.length) {
+        const [x, y] = diag[i];
+        if (this.board[x][y] !== color) { i++; continue; }
+        let j = i, run = [];
+        while (j < diag.length && this.board[diag[j][0]][diag[j][1]] === color) {
+          run.push(diag[j]); j++;
+        }
+        const L = run.length;
+        if (L >= 3 && L <= 6) {
+          const [sx, sy] = run[0], [ex, ey] = run[run.length - 1];
+          if (isBorder(sx, sy) && isBorder(ex, ey)) {
+            patterns.add(this._patKey(`DIAG${L}`, run));
+          }
+        }
+        i = j;
+      }
+    };
+    for (const [dx, dy] of [[1,1], [1,-1]]) {
+      for (const [sx, sy] of diagStarts(dx, dy)) {
+        runsToPatterns(collectDiag(sx, sy, dx, dy));
+      }
+    }
+    // 龙（排除边线）
+    for (let r = 1; r < SIZE - 1; r++) {
+      if (this.board[r].every(v => v === color))
+        patterns.add(this._patKey("DRAGON_ROW", Array.from({length: SIZE}, (_,c) => [r,c])));
+    }
+    for (let c = 1; c < SIZE - 1; c++) {
+      let ok = true;
+      for (let r = 0; r < SIZE; r++) if (this.board[r][c] !== color) { ok = false; break; }
+      if (ok) patterns.add(this._patKey("DRAGON_COL", Array.from({length: SIZE}, (_,r) => [r,c])));
+    }
+    return patterns;
+  }
+
+  _patKey(kind, cells) {
+    const sorted = cells.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]).map(([x,y])=>`${x},${y}`).join("|");
+    return `${kind}::${sorted}`;
+  }
+
+  _patParse(key) {
+    const [kind, rest] = key.split("::");
+    const cells = rest.split("|").map(s => s.split(",").map(Number));
+    return { kind, cells };
+  }
+
+  newPatternsAndReward(beforeSet, afterSet) {
+    const newOnes = [];
+    let reward = 0;
+    for (const k of afterSet) {
+      if (!beforeSet.has(k)) {
+        newOnes.push(k);
+        reward += patternReward(this._patParse(k).kind);
+      }
+    }
+    return { newOnes, reward };
+  }
+
+  patternMembers(color) {
+    const mem = new Set();
+    for (const k of this.enumeratePatterns(color)) {
+      const { cells } = this._patParse(k);
+      for (const [x, y] of cells) mem.add(`${x},${y}`);
+    }
+    return mem;
+  }
+
+  idlePositions(color) {
+    const mem = this.patternMembers(color);
+    const idle = [];
+    for (let x = 0; x < SIZE; x++) {
+      for (let y = 0; y < SIZE; y++) {
+        if (this.board[x][y] === color && !mem.has(`${x},${y}`)) idle.push([x, y]);
+      }
+    }
+    return idle;
+  }
+
+  moveForbiddenBySelfbreak(color, newPatternKeys) {
+    const forb = this.recentSelfbreakEmpty[color];
+    if (!forb || forb.size === 0) return false;
+    for (const pk of newPatternKeys) {
+      const { cells } = this._patParse(pk);
+      for (const [x, y] of cells) if (forb.has(`${x},${y}`)) return true;
+    }
+    return false;
+  }
+
+  // ========== 游戏流程控制 ==========
   _applyMove(x1, y1, x2, y2) {
     const c = this.board[x1][y1];
     this.board[x1][y1] = EMPTY;
     this.board[x2][y2] = c;
   }
+
   _clearStage3Input() {
     this.selected = null;
     this.moveInProgress = false;
   }
 
-  // ========== 阶段处理（略）==========
-  _handleStage1Place(x, y) { /* 略 */ }
-  _handleStage2Capture(x, y) { /* 略 */ }
-  _handleStage3Move(x, y) { /* 略 */ }
-  _handlePendingCapture(x, y) { /* 略 */ }
-  _handleSelfbreakClick(x, y) { /* 略 */ }
-  _requestSelfbreak(victimColor, returnToColor, countTowardStage2 = false) { /* 略 */ }
-  _doSelfBreakUntilIdle(victimColor, countTowardStage2, returnToColor) { /* 略 */ }
+  _resetStage3Context() {
+    this.selected = null;
+    this.moveInProgress = false;
+    this.needRelieve = false;
+    this.relievePlayer = null;
+  }
 
+  _resetStage3Counters() {
+    this.pendingCapture = 0;
+    this.pendingCapturer = 0;
+    this.pendingVictim = 0;
+  }
+
+  _endGame(loserColor, reason) {
+    if (this.over) return;
+    this.over = true;
+    this.winner = -loserColor;
+    this.loseReason = reason;
+    this.stage = 4;
+  }
+
+  _forceEndGame(loserColor, reason) {
+    this._endGame(loserColor, reason);
+    this.capturePlan = [];
+    this.captureIndex = Infinity;
+    this.pendingCapture = 0;
+    this.selfbreakMode = null;
+    this._resetStage3Context();
+  }
+
+  _endDraw(reason) {
+    if (this.over) return;
+    this.over = true;
+    this.winner = null;
+    this.loseReason = reason;
+    this.stage = 4;
+  }
+
+  // ========== 新增：缺失的关键方法 ==========
+  _hasAnyLegalMove(color) {
+    for (let x = 0; x < SIZE; x++) {
+      for (let y = 0; y < SIZE; y++) {
+        if (this.board[x][y] === color && this._canMove(x, y)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  _currentCaptureTask() {
+    while (
+      this.captureIndex < this.capturePlan.length &&
+      this.capturePlan[this.captureIndex].left === 0
+    ) {
+      this.captureIndex++;
+    }
+    if (this.captureIndex >= this.capturePlan.length) return null;
+    return this.capturePlan[this.captureIndex];
+  }
+
+  _advanceStage2IfDone() {
+    const next = this._currentCaptureTask();
+    if (!next) {
+      this.stage = 3;
+      this.turn = WHITE;
+      return true;
+    }
+    this.turn = next.capturer;
+    return false;
+  }
+
+  _onStage3TurnEnd(move, moverColor) {
+    this.noCaptureCounter++;
+    if (this.noCaptureCounter >= 30) {
+      this._endDraw("30步未吃子");
+      return true;
+    }
+    this._checkSingleLoop(move, moverColor);
+    if (this.loopInfo[BLACK].ok && this.loopInfo[WHITE].ok) {
+      this.loopRepeatCount++;
+      if (this.loopRepeatCount >= 5) {
+        this._endDraw("双方不变作和");
+        return true;
+      }
+    }
+    return false;
+  }
+
+  _checkSingleLoop(move, color) {
+    const from = move.from.toString();
+    const to   = move.to.toString();
+    const info = this.loopInfo[color];
+
+    if (!info.a && !info.b) {
+      info.a = move.from;
+      info.b = move.to;
+      info.ok = true;
+      return;
+    }
+
+    const a = info.a.toString();
+    const b = info.b.toString();
+
+    const valid =
+      (from === a && to === b) ||
+      (from === b && to === a);
+
+    if (!valid) {
+      info.a = null;
+      info.b = null;
+      info.ok = false;
+      return;
+    }
+
+    info.ok = true;
+  }
+
+  _clearRelieveCache() {
+    // 纯逻辑版无需缓存，留空即可
+  }
+
+  // ========== 对外统一入口 ==========
   handleClick(x, y) {
     if (this.over || this.stage === 4) return false;
-    if (this.needRelieve) return this._handleStage3Move(x, y);
-    if (this.selfbreakMode) return this._handleSelfbreakClick(x, y);
+
+    if (this.needRelieve) {
+      return this._handleStage3Move(x, y);
+    }
+    if (this.selfbreakMode) {
+      return this._handleSelfbreakClick(x, y);
+    }
     if (this.stage === 1) return this._handleStage1Place(x, y);
     if (this.stage === 2) return this._handleStage2Capture(x, y);
     if (this.stage === 3) return this._handleStage3Move(x, y);
     return false;
   }
 
-  stageText() {
-    if (this.stage === 1) return "第一阶段：落子";
-    if (this.stage === 2) return "第二阶段：吃子";
-    if (this.stage === 3) return "第三阶段：走棋";
-    return "终局";
+  // ========== 阶段1：落子 ==========
+  _handleStage1Place(x, y) {
+    const mover = this.turn;
+    if (this.board[x][y] !== EMPTY) return false;
+
+    const before = this.enumeratePatterns(mover);
+    this.board[x][y] = mover;
+    const after = this.enumeratePatterns(mover);
+    const { reward: rawReward } = this.newPatternsAndReward(before, after);
+    const allowReward = !this.placeRewardLocked;
+    const reward = allowReward ? rawReward : (rawReward > 0 ? 1 : 0);
+    if (allowReward && reward > 0) this.placeRewardLocked = true;
+
+    this.placeRemaining = this.placeRemaining - 1 + reward;
+
+    if (this.boardFull()) {
+      this.stage = 2;
+      this.turn = WHITE;
+      this.placeRewardLocked = false;
+      return true;
+    }
+
+    if (this.placeRemaining > 0) {
+      return true;
+    }
+
+    this.turn = -this.turn;
+    this.placeRemaining = 1;
+    this.placeRewardLocked = false;
+    return true;
   }
 
-  actionHint() {
-    if (this.over) return "对局已结束。";
-    if (this.selfbreakMode) {
-      const { victim } = this.selfbreakMode;
-      return `需要自拆：请 ${colorName(victim)} 点击自己的阵型子自拆。`;
+  // ========== 阶段2：吃子 ==========
+  _handleStage2Capture(x, y) {
+    const task = this._currentCaptureTask();
+    if (!task) {
+      this._advanceStage2IfDone();
+      return true;
     }
-    if (this.stage === 1) {
-      return `落子中。本方还可落子：${this.placeRemaining} 次。`;
+    const { capturer, victim } = task;
+
+    if (this.countPieces(victim) === 0) {
+      this._endGame(victim, "棋子被摘除光");
+      return true;
     }
-    if (this.stage === 2) {
-      const t = this._currentCaptureTask();
-      if (!t) return "吃子完毕，准备进入走棋。";
-      return `${colorName(t.capturer)} 吃 ${colorName(t.victim)}，还需吃 ${t.left} 个。`;
+
+    const idle = this.idlePositions(victim);
+    if (idle.length === 0) {
+      this._requestSelfbreak(victim, capturer, true);
+      return true;
     }
-    if (this.stage === 3) {
-      if (this.pendingCapture > 0) {
-        return `因成阵吃子：还需吃 ${this.pendingCapture} 个 ${colorName(this.pendingVictim)} 闲子。`;
-      }
+
+    if (this.board[x][y] !== victim) return false;
+    const isIdle = idle.some(([ix, iy]) => ix === x && iy === y);
+    if (!isIdle) return false;
+
+    this.board[x][y] = EMPTY;
+    task.left -= 1;
+
+    if (this.countPieces(victim) === 0) {
+      this._endGame(victim, "棋子被摘除光");
+      return true;
+    }
+
+    if (task.left <= 0) {
+      this._advanceStage2IfDone();
+      return true;
+    }
+
+    const idle2 = this.idlePositions(victim);
+    if (idle2.length === 0) {
+      this._requestSelfbreak(victim, capturer, true);
+      return true;
+    }
+
+    return true;
+  }
+
+  // ========== 阶段3：走棋 ==========
+  _handleStage3Move(x, y) {
+    if (this.countPieces(BLACK) === 0) {
+      this._endGame(BLACK, "棋子被摘除光");
+      return true;
+    }
+    if (this.countPieces(WHITE) === 0) {
+      this._endGame(WHITE, "棋子被摘除光");
+      return true;
+    }
+
+    if (this.pendingCapture > 0) {
+      return this._handlePendingCapture(x, y);
+    }
+
+    const mover = this.turn;
+    const opp = -mover;
+    if (!this.needRelieve && !this._hasAnyLegalMove(opp)) {
+      this.needRelieve = true;
+      this.relievePlayer = mover;
+      this.turn = mover;
+      return true;
+    }
+
+    if (!this.selected) {
+      if (this.board[x][y] !== mover) return false;
       if (this.needRelieve) {
-        return `放活：必须再走一步让对方可动。`;
+        const { candidates } = this._getRelieveAllowedPieces(mover);
+        if (!candidates.some(([ax, ay]) => ax === x && ay === y)) return false;
       }
-      return `走棋中：先选棋子，再点四邻接空位。`;
+      this.selected = { x, y };
+      return true;
     }
-    return "终局。";
+
+    if (this.board[x][y] === mover) {
+      if (this.needRelieve) {
+        const { candidates } = this._getRelieveAllowedPieces(mover);
+        if (!candidates.some(([ax, ay]) => ax === x && ay === y)) return false;
+      }
+      this.selected = { x, y };
+      return true;
+    }
+
+    const { x: sx, y: sy } = this.selected;
+    const manhattan = Math.abs(sx - x) + Math.abs(sy - y);
+    if (this.board[x][y] !== EMPTY || manhattan !== 1) {
+      this._clearStage3Input();
+      return false;
+    }
+
+    const before = this.enumeratePatterns(mover);
+    const tmpBoard = this.board.map(r => r.slice());
+    this._applyMove(sx, sy, x, y);
+    const after = this.enumeratePatterns(mover);
+    const { newOnes, reward } = this.newPatternsAndReward(before, after);
+
+    if (reward > 0 && this.moveForbiddenBySelfbreak(mover, newOnes)) {
+      this.board = tmpBoard;
+      this._clearStage3Input();
+      return false;
+    }
+
+    this._clearStage3Input();
+    this._clearRelieveCache();
+
+    if (reward > 0) {
+      this._resetStage3Context();
+      this.pendingCapture = reward;
+      this.pendingCapturer = mover;
+      this.pendingVictim = opp;
+      this.turn = mover;
+      return true;
+    }
+
+    const move = { from: [sx, sy], to: [x, y] };
+    if (this._onStage3TurnEnd(move, mover)) {
+      return true;
+    }
+
+    if (this.needRelieve) {
+      if (this.legalMoves(opp).length > 0) {
+        this._endRelieve();
+      }
+    }
+
+    if (this.needRelieve) {
+      this.turn = mover;
+    } else {
+      this.turn = opp;
+    }
+    return true;
   }
 
-  _log(s) { this.log.push(s); }
+  // ========== 成阵后吃子 ==========
+  _handlePendingCapture(x, y) {
+    const capturer = this.pendingCapturer;
+    const victim = this.pendingVictim;
 
-  resign(color) {
-    if (this.over) return;
-    this._endGame(color, "认输");
+    if (this.countPieces(victim) === 0) {
+      this._forceEndGame(victim, "棋子被摘除光");
+      return true;
+    }
+
+    const idle = this.idlePositions(victim);
+    if (idle.length === 0) {
+      this._requestSelfbreak(victim, capturer, false);
+      return true;
+    }
+
+    if (this.board[x][y] !== victim) return false;
+    const isIdle = idle.some(([ix, iy]) => ix === x && iy === y);
+    if (!isIdle) return false;
+
+    this.board[x][y] = EMPTY;
+
+    if (this.countPieces(victim) === 0) {
+      this._forceEndGame(victim, "棋子被摘除光");
+      return true;
+    }
+
+    this.pendingCapture -= 1;
+
+    if (this.pendingCapture > 0) {
+      const idle2 = this.idlePositions(victim);
+      if (idle2.length === 0) {
+        this._requestSelfbreak(victim, capturer, false);
+        return true;
+      }
+      return true;
+    }
+
+    this._resetStage3Counters();
+
+    if (this.legalMoves(victim).length === 0) {
+      this.needRelieve = true;
+      this.turn = capturer;
+      return true;
+    }
+
+    this.turn = victim;
+    return true;
+  }
+
+  // ========== 自拆点击 ==========
+  _handleSelfbreakClick(x, y) {
+    const m = this.selfbreakMode;
+    if (!m) return false;
+    const { victim, returnTo, countTowardStage2 } = m;
+
+    if (this.board[x][y] !== victim) return false;
+    const members = this.patternMembers(victim);
+    if (!members.has(`${x},${y}`)) return false;
+
+    this.board[x][y] = EMPTY;
+    this.recentSelfbreakEmpty[victim].add(`${x},${y}`);
+
+    if (countTowardStage2 && this.stage === 2) {
+      const task = this._currentCaptureTask();
+      if (task && task.victim === victim && task.left > 0) {
+        task.left -= 1;
+        if (task.left <= 0) {
+          this.selfbreakMode = null;
+          this._advanceStage2IfDone();
+          return true;
+        }
+      }
+    }
+
+    if (
+      !countTowardStage2 &&
+      this.stage === 3 &&
+      this.pendingCapture > 0 &&
+      this.pendingVictim === victim &&
+      this.pendingCapturer === returnTo
+    ) {
+      this.pendingCapture -= 1;
+      if (this.pendingCapture <= 0) {
+        this.selfbreakMode = null;
+        if (this.countPieces(victim) === 0) {
+          this._endGame(victim, "棋子被摘除光");
+          return true;
+        }
+        if (this.legalMoves(victim).length === 0) {
+          this.needRelieve = true;
+          this.turn = returnTo;
+          return true;
+        }
+        this.turn = victim;
+        return true;
+      }
+    }
+
+    if (this.idlePositions(victim).length === 0) {
+      return true;
+    }
+
+    this.selfbreakMode = null;
+    this.turn = returnTo;
+    return true;
+  }
+
+  _requestSelfbreak(victimColor, returnToColor, countTowardStage2 = false) {
+    this.selfbreakMode = {
+      victim: victimColor,
+      returnTo: returnToColor,
+      countTowardStage2,
+    };
+  }
+
+  _doSelfBreakUntilIdle(victimColor, countTowardStage2 = false, returnToColor = null) {
+    // 纯逻辑版不执行 AI 自拆，仅设置 selfbreakMode
+    this._requestSelfbreak(victimColor, returnToColor, countTowardStage2);
+  }
+
+  // 放活相关
+  _getRelieveDistanceMap(relieverColor, victimColor) {
+    const dist = new Map();
+    const q = [];
+    for (let x = 0; x < SIZE; x++) {
+      for (let y = 0; y < SIZE; y++) {
+        if (this.board[x][y] === victimColor) {
+          const k = `${x},${y}`;
+          dist.set(k, 0);
+          q.push([x, y]);
+        }
+      }
+    }
+    while (q.length) {
+      const [x, y] = q.shift();
+      const d = dist.get(`${x},${y}`);
+      for (const [dx, dy] of DIR4) {
+        const nx = x + dx, ny = y + dy;
+        if (!this.inBounds(nx, ny)) continue;
+        const v = this.board[nx][ny];
+        if (v !== relieverColor) continue;
+        const k2 = `${nx},${ny}`;
+        if (dist.has(k2)) continue;
+        dist.set(k2, d + 1);
+        q.push([nx, ny]);
+      }
+    }
+    return dist;
+  }
+
+  _getRelieveAllowedPieces(relieverColor) {
+    const victim = -relieverColor;
+    const distMap = this._getRelieveDistanceMap(relieverColor, victim);
+    const layers = new Map();
+    for (let x = 0; x < SIZE; x++) {
+      for (let y = 0; y < SIZE; y++) {
+        if (this.board[x][y] !== relieverColor) continue;
+        const k = `${x},${y}`;
+        if (!distMap.has(k)) continue;
+        const d = distMap.get(k);
+        if (!layers.has(d)) layers.set(d, []);
+        layers.get(d).push([x, y]);
+      }
+    }
+    const dists = Array.from(layers.keys()).sort((a, b) => a - b);
+    for (const d of dists) {
+      const layer = layers.get(d);
+      const movable = layer.filter(([x, y]) => this._canMove(x, y));
+      if (movable.length > 0) {
+        return { minDist: d, candidates: movable };
+      }
+    }
+    return { minDist: Infinity, candidates: [] };
+  }
+
+  _endRelieve() {
+    this.needRelieve = false;
+    this.relievePlayer = null;
+    this.selected = null;
+    this.moveInProgress = false;
   }
 
   // ========== 状态导出 ==========
@@ -458,25 +1051,66 @@ class DafangGameCore {
     game.loopRepeatCount = state.loopRepeatCount;
     return game;
   }
+
+  stageText() {
+    if (this.stage === 1) return "第一阶段：落子";
+    if (this.stage === 2) return "第二阶段：吃子";
+    if (this.stage === 3) return "第三阶段：走棋";
+    return "终局";
+  }
+
+  actionHint() {
+    if (this.over) return "对局已结束。";
+    if (this.selfbreakMode) {
+      const { victim } = this.selfbreakMode;
+      return `需要自拆：请 ${colorName(victim)} 点击自己的阵型子自拆。`;
+    }
+    if (this.stage === 1) {
+      return `落子中。本方还可落子：${this.placeRemaining} 次。`;
+    }
+    if (this.stage === 2) {
+      const t = this._currentCaptureTask();
+      if (!t) return "吃子完毕，准备进入走棋。";
+      return `${colorName(t.capturer)} 吃 ${colorName(t.victim)}，还需吃 ${t.left} 个。`;
+    }
+    if (this.stage === 3) {
+      if (this.pendingCapture > 0) {
+        return `因成阵吃子：还需吃 ${this.pendingCapture} 个 ${colorName(this.pendingVictim)} 闲子。`;
+      }
+      if (this.needRelieve) {
+        return `放活：必须再走一步让对方可动。`;
+      }
+      return `走棋中：先选棋子，再点四邻接空位。`;
+    }
+    return "终局。";
+  }
+
+  _log(s) { this.log.push(s); }
+
+  resign(color) {
+    if (this.over) return;
+    this._endGame(color, "认输");
+  }
 }
 
 // ========== 前端状态 ==========
 let socket = null;
-let role = 'spectator';
+let role = 'spectator'; // 'player' or 'spectator'
 let localColor = null;
 let roomId = null;
 let game = null;
-let heartbeatInterval = null; // 👈 新增：心跳定时器
+let heartbeatInterval = null;
+let rematchRequested = false;
 const ctx = document.getElementById('cv').getContext('2d');
 
-// ========== 心跳函数 ==========
+// ========== 心跳保活 ==========
 function startHeartbeat() {
   if (heartbeatInterval) clearInterval(heartbeatInterval);
   heartbeatInterval = setInterval(() => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ type: 'ping' }));
     }
-  }, 5 * 60 * 1000); // 每 5 分钟发一次（< 10 分钟，避免休眠）
+  }, 5 * 60 * 1000); // 每5分钟一次
 }
 
 function stopHeartbeat() {
@@ -501,28 +1135,53 @@ function drawEmptyBoard() {
 }
 
 // ========== 连接逻辑 ==========
+const WORKER_URL = 'wss://www.dafangqi.eu.cc';
+
 function connectToRoom(id, asSpectator = false) {
   if (socket) socket.close();
   roomId = id;
-  const WORKER_URL = 'wss://www.dafangqi.eu.cc';
   socket = new WebSocket(`${WORKER_URL}/game/${roomId}`);
   
   socket.onopen = () => {
     document.getElementById('connStatus').textContent = '已连接';
+    document.getElementById('roomText').textContent = roomId;
     socket.send(JSON.stringify({ type: 'join', asSpectator }));
-    startHeartbeat(); // 👈 连接成功后启动心跳
+    startHeartbeat();
   };
   
   socket.onmessage = (e) => handleServerMsg(JSON.parse(e.data));
   socket.onclose = () => {
     document.getElementById('connStatus').textContent = '断开';
-    stopHeartbeat(); // 👈 连接关闭时停止心跳
-    socket = null; // ✅ 关键：设为 null，避免后续使用
+    document.getElementById('roomText').textContent = '-';
+    stopHeartbeat();
+    socket = null;
   };
 }
 
+// 快速对战：连接到匹配端点
 document.getElementById('btnQuickMatch').onclick = () => {
-  connectToRoom('match_' + Math.random().toString(36).slice(2, 8), false);
+  if (socket) socket.close();
+  socket = new WebSocket(`${WORKER_URL}/match`);
+  
+  socket.onopen = () => {
+    document.getElementById('connStatus').textContent = '匹配中...';
+  };
+  
+  socket.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'match_success') {
+      // 匹配成功，加入指定房间
+      connectToRoom(msg.roomId, false);
+    } else {
+      handleServerMsg(msg);
+    }
+  };
+  
+  socket.onclose = () => {
+    document.getElementById('connStatus').textContent = '断开';
+    stopHeartbeat();
+    socket = null;
+  };
 };
 
 document.getElementById('btnCreateRoom').onclick = () => {
@@ -605,7 +1264,7 @@ function handleServerMsg(msg) {
 
 // ========== 用户操作 ==========
 function canvasClick(e) {
-  // ✅ 关键修复：检查连接是否有效
+  // ✅ 关键：检查连接是否有效
   if (!socket || socket.readyState !== WebSocket.OPEN) {
     alert("连接已断开，请刷新页面重新加入房间");
     return;
